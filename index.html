@@ -100,6 +100,15 @@
             border-color: #db5d5d;
         }
 
+        .error-msg {
+            color: #db5d5d;
+            font-size: 14px;
+            font-weight: 500;
+            text-align: left;
+            margin-left: 5%;
+            margin-bottom: 2px;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -110,14 +119,20 @@
         <button id="buy">Купить</button>
     </div>
     <form id="form">
-        <h2>Completing the purchase</h2>
+        <h2>Оформление покупки</h2>
 
+        <div id="name_error" class="error-msg"></div>
         <input type="text" placeholder="Имя" id="user_name">
+
+        <div id="email_error" class="error-msg"></div>
         <input type="text" placeholder="Электронная почта" id="user_email">
+
+        <div id="phone_error" class="error-msg"></div>
         <input type="text" placeholder="Номер телефона" id="user_phone">
 
-        <button id="order">Complete</button>
+        <button id="order">Оформить</button>
     </form>
+
     <script src="https://telegram.org/js/telegram-web-app.js?63"></script>
     <script>
         let tg = window.Telegram.WebApp;
@@ -136,25 +151,37 @@
 
         order.addEventListener("click", (event) => {
             event.preventDefault();
+
+            let nameError = document.getElementById("name_error");
+            let emailError = document.getElementById("email_error");
+            let phoneError = document.getElementById("phone_error");
+
+            nameError.style.display = "none";
+            emailError.style.display = "none";
+            phoneError.style.display = "none";
+
             let name = document.getElementById("user_name").value.trim();
             let email = document.getElementById("user_email").value.trim();
             let phone = document.getElementById("user_phone").value.trim();
 
             let nameRegex = /^[А-Яа-я\s]+$/;
             if (!nameRegex.test(name) || name.length < 2) {
-                alert("Введите корекктное имя!");
+                nameError.textContent = "Введите корректное имя!"
+                nameError.style.display = "block";
                 return
             }
 
             let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
-                alert("Введите корректную элекнтронную почту")
+                emailError.textContent = "Введите корректную элекнтронную почту!";
+                emailError.style.display = "block";
                 return
             }
 
             let phoneRegex = /^[0-9]+$/;
             if (!phoneRegex.test(phone) || phone.length < 7) {
-                alert("Введите корректный номер")
+                phoneError.textContent = "Введите корректный номер!"
+                phoneError.style.display = "block";
                 return
             }
 
